@@ -7,7 +7,7 @@
 
 'use strict';
 import axios from "axios";
-function SrsError(name, message) {
+export function SrsError(name, message) {
     this.name = name;
     this.message = message;
     this.stack = (new Error()).stack;
