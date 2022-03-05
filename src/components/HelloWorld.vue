@@ -1,6 +1,9 @@
 <template>
     <div class="hello">
-        <div @click="play" class="btn">播放视频</div>
+        <div>
+            <div @click="play" class="btn">播放视频</div>
+            <div @click="publish" class="btn">推送视频</div>
+        </div>
         <video id="rtc_media_player" ref="rtcMediaPlayer" controls autoplay></video>
         <div><span>Session id:</span><span>{{sessionid}}</span></div>
         <div><span>Audio:</span><span>{{audioCodec}}</span></div>
@@ -69,7 +72,8 @@ export default {
             // sdk.ontrack = function (event) { console.log('Got track', event); sdk.stream.addTrack(event.track); };
 
             // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/WebRTC_codecs#getting_the_supported_codecs
-            this.sdk.pc.onicegatheringstatechange = function (event) {
+            this.sdk.pc.onicegatheringstatechange = (event) => {
+                console.log(event);
                 if (this.sdk.pc.iceGatheringState === "complete") {
                     this.audioCodec = SrsRtcFormatSenders(this.sdk.pc.getSenders(), "audio");
                     this.videoCodec = SrsRtcFormatSenders(this.sdk.pc.getSenders(), "video");
@@ -77,11 +81,11 @@ export default {
             };
 
             // For example: webrtc://r.ossrs.net/live/livestream "webrtc://124.222.18.231/live/livestream.flv"
-            var url = 'webrtc://124.222.18.231/live/livestream.flv';
-            this.sdk.publish(url).then(function(session){
+            var url = 'webrtc://124.222.18.231:443/live/livestream?schema=https&secret=7e5f3262';
+            this.sdk.publish(url).then((session) => {
                 this.sessionid = session.sessionid;
                 this.simulator = session.simulator + '?drop=1&username=' + session.sessionid;
-            }).catch(function (reason) {
+            }).catch((reason) => {
                 // Throw by sdk.
                 if (reason instanceof SrsError) {
                     if (reason.name === 'HttpsRequiredError') {
@@ -126,11 +130,16 @@ a {
   color: #42b983;
 }
 .btn {
+    display: inline-block;
     width: 70px;
-    border: 1px solid #42b983;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #edf5f1;
+    border-radius: 3px;
     background-color: #42b983;
     cursor: pointer;
     margin: auto;
     margin-bottom: 20px;
+    margin-right: 20px;
 }
 </style>

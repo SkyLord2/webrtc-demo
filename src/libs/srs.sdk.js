@@ -81,7 +81,8 @@ function SrsRtcPublisherAsync() {
                 conf.apiUrl,
                 JSON.stringify(data),
             )
-            .then((data) => {
+            .then((result) => {
+                let data = result.data;
                 console.log("Got answer: ", data);
                 if (data.code) {
                     reject(data);
