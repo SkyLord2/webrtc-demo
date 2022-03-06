@@ -3,6 +3,7 @@
         <div>
             <div @click="play" class="btn">播放视频</div>
             <div @click="publish" class="btn">推送视频</div>
+            <div @click="stop" class="btn">关闭</div>
         </div>
         <video id="rtc_media_player" ref="rtcMediaPlayer" controls autoplay></video>
         <div><span>Session id:</span><span>{{sessionid}}</span></div>
@@ -56,6 +57,7 @@ export default {
             var video = this.$refs.rtcMediaPlayer;
             video.srcObject = null;
             video.pause();
+            this.sdk && this.sdk.close();
         },
         publish() {
             var video = this.$refs.rtcMediaPlayer;
